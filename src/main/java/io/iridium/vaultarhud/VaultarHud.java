@@ -65,7 +65,13 @@ class VaultarHUDOverlay {
 
 
     public static List<VaultarItem> getVaultarItems(ServerPlayer player) {
+
+        if (player == null) {
+            return new ArrayList<>();
+        }
         ServerLevel level = player.getLevel();
+
+
         PlayerVaultAltarData altarData = PlayerVaultAltarData.get(level);
 
         if (altarData == null) {
