@@ -1,0 +1,19 @@
+package io.iridium.vaultarhud.util;
+
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
+import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import org.lwjgl.glfw.GLFW;
+
+public class KeyBindings {
+
+    public static final String KEY_CATEGORY = "key.categories.vaultarhud";
+    public static final String KEY_BINDING = "key.vaultarhud.toggle";
+    public static final KeyMapping TOGGLE_HUD = new KeyMapping(KEY_BINDING, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_0, KEY_CATEGORY);
+
+    public static void init(){
+//        ClientRegistry.registerKeyBinding(TOGGLE_HUD);
+    }
+
+}
