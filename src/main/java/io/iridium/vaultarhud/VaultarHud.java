@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 @Mod(VaultarHud.MOD_ID)
 public class VaultarHud {
 
-
     public static final String MOD_ID = "vaultarhud";
 
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -39,6 +38,7 @@ public class VaultarHud {
             ModMessages.register();
         });
     }
+
 
 
 }

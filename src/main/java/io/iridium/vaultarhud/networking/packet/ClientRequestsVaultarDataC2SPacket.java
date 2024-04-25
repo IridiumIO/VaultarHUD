@@ -41,12 +41,15 @@ public class ClientRequestsVaultarDataC2SPacket {
 
             List<VaultarItem> newItems = getVaultarItems(player);
 
-//            List<VaultarItem> testItems = Arrays.asList(
+
+            //DEBUGGING
+//            List<VaultarItem> newItems = Arrays.asList(
 //                    new VaultarItem(Arrays.asList(getItemStack("minecraft:stone"), getItemStack("minecraft:cobblestone"), getItemStack("minecraft:deepslate"), getItemStack("minecraft:cobbled_deepslate")), 25, 25),
 //                    new VaultarItem(Arrays.asList(getItemStack("minecraft:cracked_polished_blackstone_bricks")), 14, 23),
 //                    new VaultarItem(Arrays.asList(getItemStack("minecraft:birch_log"), getItemStack("minecraft:oak_log"), getItemStack("minecraft:spruce_log")), 42, 1056),
 //                    new VaultarItem(Arrays.asList(getItemStack("minecraft:bamboo")), 217, 218)
 //            );
+
 
 
             if (System.currentTimeMillis() - lastPacketTime < packetCooldown) {
@@ -55,7 +58,6 @@ public class ClientRequestsVaultarDataC2SPacket {
 
             ModMessages.sendToClient(new ServerReturnsVaultarDataS2CPacket(newItems), player);
 
-//            ModMessages.sendToClient(new ServerReturnsVaultarDataS2CPacket(testItems), player);
 
             lastPacketTime = System.currentTimeMillis();
         });
