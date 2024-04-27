@@ -50,8 +50,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import com.refinedmods.refinedstorage.screen.grid.GridScreen;
-
 import net.p3pp3rf1y.sophisticatedcore.client.gui.StorageScreenBase;
+
+import appeng.client.gui.me.common.MEStorageScreen;
+import appeng.client.gui.me.items.CraftingTermScreen;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -239,13 +242,9 @@ public class VaultarHUDOverlay {
 
     private static int curHeight = 0;
     private static boolean isValidRSScreen(Screen screen){
-
         List<Class<? extends Screen>> Screens = Arrays.asList(
                 GridScreen.class
         );
-
-
-
         return Screens.stream().anyMatch(cls -> cls.isInstance(screen));
     }
 
@@ -254,10 +253,23 @@ public class VaultarHUDOverlay {
         List<Class<? extends Screen>> Screens = Arrays.asList(
                 StorageScreenBase.class
         );
+        return Screens.stream().anyMatch(cls -> cls.isInstance(screen));
+    }
 
+    private static boolean isValidAE2Screen(Screen screen){
+
+        List<Class<? extends Screen>> Screens = Arrays.asList(
+                MEStorageScreen.class,
+                CraftingTermScreen.class
+        );
 
         if (Screens.stream().anyMatch(cls -> cls.isInstance(screen))){
-            StorageScreenBase gridScreen = (StorageScreenBase) screen;
+            MEStorageScreen gridScreen = (MEStorageScreen) screen;
+
+            if (gridScreen == null){
+                gridScreen = (CraftingTermScreen) screen;
+            }
+
 
             if (gridScreen.getYSize() != curHeight) {
                 curHeight = gridScreen.getYSize();
@@ -300,6 +312,18 @@ public class VaultarHUDOverlay {
             StorageScreenBase gs = (StorageScreenBase) screen;
 
             x = ((screenWidth - 176) / 2) - 27;
+            y = ((screenHeight + gs.getYSize()) / 2) - 87;
+        }
+
+        if (isValidAE2Screen(screen)){
+
+            MEStorageScreen gs = (MEStorageScreen) screen;
+
+            if (gs == null){
+                gs = (CraftingTermScreen) screen;
+            }
+
+            x = ((screenWidth - 195) / 2) - 27;
             y = ((screenHeight + gs.getYSize()) / 2) - 88;
         }
 
@@ -314,7 +338,7 @@ public class VaultarHUDOverlay {
             return;
         }
 
-        if (!isValidVanillaScreen(event.getScreen()) && !isValidRSScreen(event.getScreen()) && !isValidSophisticatedBackpackScreen(event.getScreen())) {
+        if (!isValidVanillaScreen(event.getScreen()) && !isValidRSScreen(event.getScreen()) && !isValidSophisticatedBackpackScreen(event.getScreen()) && !isValidAE2Screen(event.getScreen())) {
             return;
         }
 
@@ -337,15 +361,15 @@ public class VaultarHUDOverlay {
         }
 
         if (visibilityMode == 2){
-            RenderInventoryView(minecraft, event.getPoseStack());
+            RenderInventoryView(minecraft, event.getPoseStack(), isValidVanillaScreen(event.getScreen())? true : false);
             return;
         }
-        RenderView1(minecraft, event.getPoseStack(), 0);
+        RenderView1(minecraft, event.getPoseStack(), 2);
 
     }
 
 
-    public static void RenderInventoryView(Minecraft minecraft, PoseStack poseStack) {
+    public static void RenderInventoryView(Minecraft minecraft, PoseStack poseStack, boolean showCrystal) {
 
         // Set the color and enable transparency
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -369,7 +393,10 @@ public class VaultarHUDOverlay {
         GuiComponent.blit(poseStack, x, y, 28, 87, 28, 87, 28, 87);
         poseStack.popPose();
 
-        RenderCrystal(poseStack, x + 6, y -21, scale);
+
+        if (showCrystal) {
+            RenderCrystal(poseStack, x + 6, y - 21, scale);
+        }
 
         // Render each item
         for (int i = 0; i < vaultarItems.size(); i++) {
@@ -448,7 +475,7 @@ public class VaultarHUDOverlay {
 
         double guiScale = minecraft.getWindow().getGuiScale();
 
-        ScalableItemRenderer(itemStack, x -5 , y , scale, false);
+        ScalableItemRenderer(itemStack, x, y , scale, false);
 
         MouseHandler mouseHandler = minecraft.mouseHandler;
         double mouseX = (double)mouseHandler.xpos();
