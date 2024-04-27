@@ -18,7 +18,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '0.0.4-1.18.2'
+version = '0.0.5-1.18.2'
 group = 'io.iridium.vaultarhud' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'vaultarhud'
 
@@ -156,6 +156,10 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.9'
 
     compileOnly name: 'the_vault-1.18.2-3.11.0.3011'
+    compileOnly name: 'refinedstorage-1.10.6'
+    compileOnly name: 'appliedenergistics2-forge-11.7.0'
+    compileOnly name: 'sophisticatedcore-1.18.2-0.5.48.244'
+
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
