@@ -1,0 +1,116 @@
+package io.iridium.vaultarhud.renderers;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import io.iridium.vaultarhud.VaultarHUDOverlay;
+import io.iridium.vaultarhud.VaultarHud;
+import io.iridium.vaultarhud.VaultarItem;
+import io.iridium.vaultarhud.util.Point;
+import iskallia.vault.client.ClientPartyData;
+import iskallia.vault.world.data.VaultPartyData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+
+import static io.iridium.vaultarhud.util.SharedFunctions.renderBackground;
+
+public class HUDInGameRenderer implements IVaultarHUDRenderer{
+
+        private static Minecraft minecraft = Minecraft.getInstance();
+
+        private static ResourceLocation hudTexture2 = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_2.png");
+
+        @Override
+        public void render(PoseStack poseStack, Point origin) {
+
+                // Set the color and enable transparency
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.enableBlend();
+
+                float scale = 1.0F;
+
+                //Define the spacing between each rendered element
+                int elementSpacing = Math.round(42 * scale);
+
+                // Calculate starting coordinates for rendering; in this case, on the right side of the screen centered vertically
+                int screenWidth = minecraft.getWindow().getGuiScaledWidth();
+                int screenHeight = minecraft.getWindow().getGuiScaledHeight();
+                double x = (origin.getX() == -1)? screenWidth - Math.round(135 * scale) : origin.getX();
+                int y = CalculateYOffsetIfPartyVisible(screenHeight, elementSpacing);
+
+
+                // Render each item
+                for (VaultarItem item : VaultarHUDOverlay.vaultarItems) {
+                        RenderMainHUDCompositeElement(poseStack, (int) x, y, item.getCurrentItem(VaultarHUDOverlay.TICKER), item.getCountCompleted(), item.getCountTotal(), 1.0F);
+                        y += elementSpacing;
+                }
+
+
+                // Reset the color and disable transparency
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.disableBlend();
+        }
+
+
+        private static void RenderMainHUDCompositeElement(PoseStack poseStack, int x, int y, ItemStack itemStack, int countCompleted, int countTotal, float scale){
+
+                poseStack.pushPose();
+                poseStack.translate(x, y, 100.0F);
+                poseStack.scale(scale, scale, 1.0F);
+                poseStack.translate(-x, -y, 0);
+
+                //Draw the background image
+                renderBackground(poseStack, x, y, 130, 38, hudTexture2);
+
+                // Draw the item icon
+                ScalableItemRenderer.render(itemStack, new Point(x + 6 * scale , y + 5 * scale), scale, false);
+
+
+                // Center the item count text and draw it and the progress bar
+                String text_count = countCompleted + "/" + countTotal;
+                int stringWidth = minecraft.font.width(text_count);
+                int xOffset = x + 65 - stringWidth / 2;
+                GuiComponent.fill(poseStack, x + 6, y + 29, (int) Math.floor((x + 6) + ((float) countCompleted / countTotal * 118)), y + 34, 0xFF00FF00);
+                minecraft.font.drawShadow(poseStack, new TextComponent(text_count), xOffset, y + 27, 0xFFFFFF);
+
+                // Draw the item name, shrinking its size if it is too long
+                String text_name = itemStack.getHoverName().getString();
+                int nameWidth = minecraft.font.width(text_name);
+                if (nameWidth > 100) {
+                        poseStack.pushPose();
+                        float scaleF = 100.0f / nameWidth;
+                        poseStack.scale(scaleF, scaleF, 1.0f);
+                        minecraft.font.drawShadow(poseStack, new TextComponent(text_name), (x + 26) / scaleF, (y + 10) / scaleF, 0x54FC54);
+                        poseStack.popPose();
+                } else {
+                        minecraft.font.drawShadow(poseStack, new TextComponent(text_name), x + 26, y + 9, 0x54FC54);
+                }
+
+                poseStack.popPose();
+
+
+        }
+
+
+
+
+        private static int CalculateYOffsetIfPartyVisible(int screenHeight, int elementSpacing){
+                int y = screenHeight / 2 - (elementSpacing * VaultarHUDOverlay.vaultarItems.size() / 2);
+
+                VaultPartyData.Party party = ClientPartyData.getParty(minecraft.player.getUUID());
+
+                if (party != null){
+                        int partySize = party.getMembers().size();
+                        y = (int)Math.max(screenHeight/3.0F, 42.0F);
+                        y += (partySize) * 12 + 14;
+                }
+
+                //Sanity check so that the HUD doesn't render off the screen if the party is too large
+                return Math.min(y, screenHeight - (elementSpacing * VaultarHUDOverlay.vaultarItems.size()) - 20);
+
+
+        }
+
+}

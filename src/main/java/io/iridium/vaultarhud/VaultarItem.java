@@ -3,18 +3,20 @@ package io.iridium.vaultarhud;
 import iskallia.vault.altar.AltarInfusionRecipe;
 import iskallia.vault.altar.RequiredItems;
 import iskallia.vault.world.data.PlayerVaultAltarData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+
+import static io.iridium.vaultarhud.util.SharedFunctions.getItemStackFromTag;
 
 public class VaultarItem {
     private List<ItemStack> items;
@@ -23,11 +25,30 @@ public class VaultarItem {
     private int countTotal;
 
     public VaultarItem(List<ItemStack> items, int countCompleted, int countTotal) {
-//        this.currentTagIndex = 0;
         this.countCompleted = countCompleted;
         this.countTotal = countTotal;
         this.items = items;
     }
+
+
+    public VaultarItem(CompoundTag itemTag){
+        int amountRequired = itemTag.getInt("amountRequired");
+        int currentAmount = itemTag.getInt("currentAmount");
+        ListTag itemsList = itemTag.getList("items", 10);
+
+        List<ItemStack> requiredItems = new ArrayList<>();
+        for (Tag rawSubItemTag : itemsList) {
+            CompoundTag subItemTag = (CompoundTag) rawSubItemTag;
+            String id = subItemTag.getString("id");
+            requiredItems.add(getItemStackFromTag(id));
+        }
+
+        this.items = requiredItems;
+        this.countCompleted = currentAmount;
+        this.countTotal = amountRequired;
+
+    }
+
 
     public ItemStack getCurrentItem(int ticker) {return items.get(ticker % items.size());}
 //    public void updateIndex() {
