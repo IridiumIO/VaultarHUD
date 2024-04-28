@@ -95,8 +95,7 @@ public class VaultarHUDOverlay {
             lastChangeTime = currentTime;
         }
 
-        HUDInGameRenderer renderer = new HUDInGameRenderer();
-        renderer.render(event.getMatrixStack(), new Point(-1, 0));
+        HUDInGameRenderer.render(event.getMatrixStack(), new Point(-1, 0));
 
     }
 
@@ -121,32 +120,13 @@ public class VaultarHUDOverlay {
         }
 
         if (visibilityMode == 2){
-
-            HUDInventoryRenderer renderer = new HUDInventoryRenderer(ScreenValidator.isScreenInList(event.getScreen(), ScreenValidator.VANILLA_SCREENS)? true : false);
-            renderer.render(event.getPoseStack(), null);
+            HUDInventoryRenderer.render(event.getPoseStack(), null);
             return;
         }
 
-        HUDInGameRenderer renderer = new HUDInGameRenderer();
-        renderer.render(event.getPoseStack(), new Point(2, 0));
+        HUDInGameRenderer.render(event.getPoseStack(), new Point(2, 0));
 
     }
-
-
-    public static  void RenderCrystal(PoseStack poseStack, int x, int y, float scale) {
-        poseStack.pushPose();
-        poseStack.translate(x, y, 100F);
-        poseStack.scale(scale, scale, 1.0F);
-        poseStack.translate(-x, -y, 0);
-
-        ItemStack crystal = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("the_vault:vault_crystal")));
-
-        ScalableItemRenderer.render(crystal, new Point(x, y), scale, true);
-
-        poseStack.popPose();
-
-    }
-
 
 
 

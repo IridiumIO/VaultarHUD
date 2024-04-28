@@ -45,13 +45,26 @@ public class SharedFunctions {
         return !(dimension.equals("minecraft:overworld") || dimension.equals("minecraft:the_nether") || dimension.equals("minecraft:the_end"));
     }
 
-    public static boolean isMouseOverItem(double mouseX, double mouseY, double itemX, double itemY, float scale) {
+
+    private static double lastMouseX = -1;
+    private static double lastMouseY = -1;
+    private static boolean lastMouseState = false;
+    public static boolean isMouseOverItem(double mouseX, double mouseY, double itemX, double itemY, double itemWidth, double itemHeight, float scale) {
         // Calculate the bounds of the item
-        int itemWidth = (int) (16 * scale);
-        int itemHeight = (int) (16 * scale);
+        if (mouseX == lastMouseX && mouseY == lastMouseY) {
+            return lastMouseState;
+        }
+
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+
+        itemWidth = (int) (itemWidth * scale);
+        itemHeight = (int) (itemHeight * scale);
 
         // Check if the mouse's position is within the item's bounds
-        return mouseX >= itemX && mouseY >= itemY && mouseX < itemX + itemWidth && mouseY < itemY + itemHeight;
+        lastMouseState =  mouseX >= itemX && mouseY >= itemY && mouseX < itemX + itemWidth && mouseY < itemY + itemHeight;
+
+        return lastMouseState;
     }
 
 

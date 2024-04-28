@@ -14,23 +14,23 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import static io.iridium.vaultarhud.util.SharedFunctions.isMouseOverItem;
 import static io.iridium.vaultarhud.util.SharedFunctions.renderBackground;
 
-public class HUDInventoryRenderer implements IVaultarHUDRenderer{
+public class HUDInventoryRenderer {
 
-        private boolean renderCrystal = true;
         private static ResourceLocation hudInventoryTexture = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_inv.png");
+        private static ResourceLocation hudSmallInventoryTexture = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_inv_small.png");
 
         private static Minecraft minecraft = Minecraft.getInstance();
 
-        public HUDInventoryRenderer(boolean renderCrystal) {
-            this.renderCrystal = renderCrystal;
-        }
 
-        @Override
-        public void render(PoseStack poseStack, Point renderOrigin) {
+        public static boolean ShowHoverHUD = false;
+
+
+        public static void render(PoseStack poseStack, Point renderOrigin) {
 
                 // Set the color and enable transparency
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -41,24 +41,48 @@ public class HUDInventoryRenderer implements IVaultarHUDRenderer{
                 //Define the spacing between each rendered element
                 int elementSpacing = Math.round(18 * scale);
 
-                // Calculate starting coordinates for rendering
-                Point offset = ScreenValidator.getScreenHUDCoordinates(minecraft.screen);
+                double GUISCALE = minecraft.getWindow().getGuiScale();
+
+                Point offset = ScreenValidator.getScreenHUDCoordinates(minecraft.screen, new Point(28, 28));
                 int x = (int) offset.getX();
                 int y = (int) offset.getY();
 
-                // Draw the background image
-                renderBackground(poseStack, x, y, 28, 87, hudInventoryTexture);
-
-
-                if (renderCrystal) {
-                        VaultarHUDOverlay.RenderCrystal(poseStack, x + 6, y - 21, scale);
+                if (ShowHoverHUD == false && isMouseOverItem(minecraft.mouseHandler.xpos(), minecraft.mouseHandler.ypos(), x * GUISCALE, y * GUISCALE, 28, 28, (float) GUISCALE)) {
+                        ShowHoverHUD = true;
+                }else if (ShowHoverHUD == false) {
+                        // Draw the background image
+                        renderBackground(poseStack, x, y, 28, 28, hudSmallInventoryTexture);
+                        RenderAltar(poseStack, x + 6, y + 8, 1.0F);
+                        RenderCrystal(poseStack, x + 10, y +3, 0.5F, false);
                 }
 
-                // Render each item
-                for (int i = 0; i < VaultarHUDOverlay.vaultarItems.size(); i++) {
-                        VaultarItem item = VaultarHUDOverlay.vaultarItems.get(i);
-                        RenderInventoryHUDCompositeElement(poseStack, x+6, y + 10 + (elementSpacing * i), item.getCurrentItem(VaultarHUDOverlay.TICKER), item.getCountCompleted(), item.getCountTotal(), scale);
+
+                if (ShowHoverHUD){
+
+                        y -= 59;
+
+                        if (!isMouseOverItem(minecraft.mouseHandler.xpos(), minecraft.mouseHandler.ypos(), x * GUISCALE, y * GUISCALE, 28, 87, (float) GUISCALE)){
+                                ShowHoverHUD = false;
+
+                        }else{
+                                // Draw the background image
+                                renderBackground(poseStack, x, y, 28, 87, hudInventoryTexture);
+
+                                RenderCrystal(poseStack, x + 6, y - 21, scale, false);
+
+
+                                // Render each item
+                                for (int i = 0; i < VaultarHUDOverlay.vaultarItems.size(); i++) {
+                                        VaultarItem item = VaultarHUDOverlay.vaultarItems.get(i);
+                                        RenderInventoryHUDCompositeElement(poseStack, x+6, y + 10 + (elementSpacing * i), item.getCurrentItem(VaultarHUDOverlay.TICKER), item.getCountCompleted(), item.getCountTotal(), scale);
+                                }
+                        }
+
+
+
                 }
+
+
 
                 // Reset the color and disable transparency
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -82,39 +106,55 @@ public class HUDInventoryRenderer implements IVaultarHUDRenderer{
                 }
 
 
-
-                double guiScale = minecraft.getWindow().getGuiScale();
-
-                ScalableItemRenderer.render(itemStack, new Point(x, y) , scale, false);
-
-                MouseHandler mouseHandler = minecraft.mouseHandler;
-                double mouseX = (double)mouseHandler.xpos();
-                double mouseY = (double)mouseHandler.ypos();
-                if(isMouseOverItem(mouseX, mouseY, x * guiScale, y * guiScale, (float) guiScale)){
-
-                        poseStack.pushPose();
-
-                        GuiComponent.fill(poseStack, x , y, x+16, y + 16, 0x60FFFFFF);
-
-                        poseStack.translate(0, 0, 110F);
-                        String text_count = countCompleted + "/" + countTotal;
-                        int stringWidth = minecraft.font.width(text_count);
-                        int xOffset = x - 8 - stringWidth;
-
-                        int pColor = (countCompleted == countTotal) ? 0x00FF00 : 0xFFFFFF;
-
-                        minecraft.font.drawShadow(poseStack, new TextComponent(text_count), xOffset, y + 5, pColor);
-                        poseStack.popPose();
-
-                }
+                ScalableItemRenderer.render(itemStack, new Point(x, y) , scale);
 
 
-                // Center the item count text and draw it and the progress bar
+                poseStack.pushPose();
 
+//                GuiComponent.fill(poseStack, x , y, x+16, y + 16, 0x60FFFFFF);
 
+                poseStack.translate(0, 0, 110F);
+                String text_count = countCompleted + "/" + countTotal;
+                int stringWidth = minecraft.font.width(text_count);
+                int xOffset = x - 8 - stringWidth;
+
+                int pColor = (countCompleted == countTotal) ? 0x00FF00 : 0xFFFFFF;
+
+                minecraft.font.drawShadow(poseStack, new TextComponent(text_count), xOffset, y + 5, pColor);
+                poseStack.popPose();
 
                 poseStack.popPose();
 
+
+        }
+
+
+
+        public static void RenderCrystal(PoseStack poseStack, int x, int y, float scale, boolean isFloating) {
+                poseStack.pushPose();
+                poseStack.translate(x, y, 200F);
+                poseStack.scale(scale, scale, 1.0F);
+                poseStack.translate(-x, -y, 0);
+
+                ItemStack crystal = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("the_vault:vault_crystal")));
+
+                ScalableItemRenderer.render(crystal, new Point(x, y), scale, isFloating, true, true);
+
+                poseStack.popPose();
+
+        }
+
+        public static void RenderAltar(PoseStack poseStack, int x, int y, float scale) {
+                poseStack.pushPose();
+                poseStack.translate(x, y, 1F);
+                poseStack.scale(scale, scale, 1.0F);
+                poseStack.translate(-x, -y, 0);
+
+                ItemStack altar = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("the_vault:vault_altar")));
+
+                ScalableItemRenderer.render(altar, new Point(x, y), scale, false, false, false);
+
+                poseStack.popPose();
 
         }
 

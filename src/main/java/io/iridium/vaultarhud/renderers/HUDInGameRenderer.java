@@ -13,17 +13,18 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 import static io.iridium.vaultarhud.util.SharedFunctions.renderBackground;
 
-public class HUDInGameRenderer implements IVaultarHUDRenderer{
+public class HUDInGameRenderer{
 
         private static Minecraft minecraft = Minecraft.getInstance();
 
         private static ResourceLocation hudTexture2 = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_2.png");
 
-        @Override
-        public void render(PoseStack poseStack, Point origin) {
+
+        public static void render(PoseStack poseStack, Point origin) {
 
                 // Set the color and enable transparency
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -65,7 +66,10 @@ public class HUDInGameRenderer implements IVaultarHUDRenderer{
                 renderBackground(poseStack, x, y, 130, 38, hudTexture2);
 
                 // Draw the item icon
-                ScalableItemRenderer.render(itemStack, new Point(x + 6 * scale , y + 5 * scale), scale, false);
+                if (countCompleted == countTotal){
+                        itemStack.enchant(Enchantment.byId(1), 1);
+                }
+                ScalableItemRenderer.render(itemStack, new Point(x + 6 * scale , y + 5 * scale), scale );
 
 
                 // Center the item count text and draw it and the progress bar

@@ -23,7 +23,12 @@ public class ScalableItemRenderer {
 
         private static Minecraft minecraft = Minecraft.getInstance();
 
-        public static void render(ItemStack itemStack, Point renderOrigin, float scale, boolean isAnimated) {
+
+        public static void render(ItemStack itemStack, Point renderOrigin, float scale){
+                render(itemStack, renderOrigin, scale, false, false, false);
+        }
+
+        public static void render(ItemStack itemStack, Point renderOrigin, float scale, boolean isFloating, boolean isSpinning, boolean isShiny) {
                 ItemRenderer renderer = minecraft.getItemRenderer();
 
                 BakedModel pBakedModel = getBakedModel(itemStack);
@@ -38,9 +43,9 @@ public class ScalableItemRenderer {
                 int x = (int) renderOrigin.getX();
                 int y = (int) renderOrigin.getY();
 
-                if (isAnimated) {
+                if (isFloating) {
                         // Add a sine wave function to the y coordinate to create an up and down motion
-                        y += Math.sin(System.currentTimeMillis() % 4000.0 / 4000.0 * 2.0 * Math.PI) * 5.0;  // Change 10.0 to control the height of the motion
+                        y += Math.sin(System.currentTimeMillis() % 4000.0 / 4000.0 * 2.0 * Math.PI) * 5.0;  // Change 5.0 to control the height of the motion
                 }
 
                 poseStack.translate(x , y, 300.0F);
@@ -53,8 +58,8 @@ public class ScalableItemRenderer {
                 blockPoseStack.pushPose();
 
 
-                if (isAnimated){
-                        float angle = System.currentTimeMillis() / 20 % 340;
+                if (isSpinning){
+                        float angle = System.currentTimeMillis() / 15 % 340;
                         Quaternion rotation = Vector3f.YP.rotationDegrees(angle);
                         blockPoseStack.mulPose(rotation);
                 }
@@ -66,7 +71,7 @@ public class ScalableItemRenderer {
                         Lighting.setupForFlatItems();
                 }
 
-                if (isAnimated){
+                if (isShiny){
                         itemStack.enchant(Enchantment.byId(1), 1);
                 }
 
