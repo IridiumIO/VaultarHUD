@@ -159,7 +159,8 @@ dependencies {
     compileOnly name: 'refinedstorage-1.10.6'
     compileOnly name: 'appliedenergistics2-forge-11.7.0'
     compileOnly name: 'sophisticatedcore-1.18.2-0.5.48.244'
-
+    compileOnly name: 'CyclopsCore-1.18.2-1.16.1'
+    compileOnly name: 'SimpleStorageNetwork-1.18.2-1.6.2'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
