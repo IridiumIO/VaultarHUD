@@ -10,6 +10,7 @@ import io.iridium.vaultarhud.util.ScreenValidator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -68,7 +69,7 @@ public class HUDInventoryRenderer {
                                 // Draw the background image
                                 renderBackground(poseStack, x, y, 28, 87, hudInventoryTexture);
 
-                                RenderCrystal(poseStack, x + 6, y - 21, scale, false);
+                                RenderCrystal(poseStack, x + 6, y - 19, scale, true);
 
 
                                 // Render each item
@@ -129,14 +130,15 @@ public class HUDInventoryRenderer {
         }
 
 
+        private static final ItemStack crystal = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("the_vault:vault_crystal")));
+        private static final ItemStack altar = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("the_vault:vault_altar")));
+
 
         public static void RenderCrystal(PoseStack poseStack, int x, int y, float scale, boolean isFloating) {
                 poseStack.pushPose();
                 poseStack.translate(x, y, 200F);
                 poseStack.scale(scale, scale, 1.0F);
                 poseStack.translate(-x, -y, 0);
-
-                ItemStack crystal = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("the_vault:vault_crystal")));
 
                 ScalableItemRenderer.render(crystal, new Point(x, y), scale, isFloating, true, true);
 
@@ -149,8 +151,6 @@ public class HUDInventoryRenderer {
                 poseStack.translate(x, y, 1F);
                 poseStack.scale(scale, scale, 1.0F);
                 poseStack.translate(-x, -y, 0);
-
-                ItemStack altar = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("the_vault:vault_altar")));
 
                 ScalableItemRenderer.render(altar, new Point(x, y), scale, false, false, false);
 

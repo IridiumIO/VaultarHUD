@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import io.iridium.vaultarhud.VaultarHud;
 import io.iridium.vaultarhud.util.Point;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,15 +24,13 @@ public class ScalableItemRenderer {
 
         private static Minecraft minecraft = Minecraft.getInstance();
 
-
         public static void render(ItemStack itemStack, Point renderOrigin, float scale){
                 render(itemStack, renderOrigin, scale, false, false, false);
         }
 
         public static void render(ItemStack itemStack, Point renderOrigin, float scale, boolean isFloating, boolean isSpinning, boolean isShiny) {
                 ItemRenderer renderer = minecraft.getItemRenderer();
-
-                BakedModel pBakedModel = getBakedModel(itemStack);
+                BakedModel pBakedModel = getBakedModel(itemStack, renderer);
                 RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
                 RenderSystem.enableBlend();
                 RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -41,11 +40,11 @@ public class ScalableItemRenderer {
                 poseStack.pushPose();
 
                 int x = (int) renderOrigin.getX();
-                int y = (int) renderOrigin.getY();
+                double y = renderOrigin.getY();
 
                 if (isFloating) {
                         // Add a sine wave function to the y coordinate to create an up and down motion
-                        y += Math.sin(System.currentTimeMillis() % 4000.0 / 4000.0 * 2.0 * Math.PI) * 5.0;  // Change 5.0 to control the height of the motion
+                        y += Math.sin(System.currentTimeMillis() % 4000.0 / 4000.0 * 2.0 * Math.PI) * 3.0;  // Change 5.0 to control the height of the motion
                 }
 
                 poseStack.translate(x , y, 300.0F);
@@ -59,7 +58,9 @@ public class ScalableItemRenderer {
 
 
                 if (isSpinning){
-                        float angle = System.currentTimeMillis() / 15 % 340;
+                        float angle = (float) (System.currentTimeMillis() / 15.0 % 340.0);
+
+
                         Quaternion rotation = Vector3f.YP.rotationDegrees(angle);
                         blockPoseStack.mulPose(rotation);
                 }

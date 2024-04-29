@@ -17,7 +17,7 @@ import static io.iridium.vaultarhud.VaultarItem.getVaultarItems;
 public class ClientRequestsVaultarDataC2SPacket {
 
     private static long lastPacketTime = 0;
-    private static long packetCooldown = 100;
+    private static final long PACKET_COOLDOWN = 100;
 
     public ClientRequestsVaultarDataC2SPacket() {}
 
@@ -44,22 +44,16 @@ public class ClientRequestsVaultarDataC2SPacket {
 //            );
 
 
-
-            if (System.currentTimeMillis() - lastPacketTime < packetCooldown) {
+            if (System.currentTimeMillis() - lastPacketTime < PACKET_COOLDOWN) {
                 return;
             }
 
             ModMessages.sendToClient(new ServerReturnsVaultarDataS2CPacket(newItems), player);
-
-
             lastPacketTime = System.currentTimeMillis();
         });
 
         return true;
     }
 
-    private static ItemStack getItemStack(String item) {
-        return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(item)));
-    }
 
 }

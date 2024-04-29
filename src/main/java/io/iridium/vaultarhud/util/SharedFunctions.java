@@ -15,6 +15,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class SharedFunctions {
 
+    private static final Minecraft minecraft = Minecraft.getInstance();
+
 
     public static String formatNumber(int number) {
         if (number > 1000) {
@@ -34,13 +36,12 @@ public class SharedFunctions {
         return itemStack.getItem() instanceof BlockItem;
     }
 
-    public static BakedModel getBakedModel(ItemStack itemStack) {
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+    public static BakedModel getBakedModel(ItemStack itemStack, ItemRenderer itemRenderer) {
         return itemRenderer.getItemModelShaper().getItemModel(itemStack);
     }
 
     public static boolean isInVault() {
-        ClientLevel level = Minecraft.getInstance().level;
+        ClientLevel level = minecraft.level;
         String dimension = level.dimension().location().toString();
         return !(dimension.equals("minecraft:overworld") || dimension.equals("minecraft:the_nether") || dimension.equals("minecraft:the_end"));
     }
@@ -50,6 +51,7 @@ public class SharedFunctions {
     private static double lastMouseY = -1;
     private static boolean lastMouseState = false;
     public static boolean isMouseOverItem(double mouseX, double mouseY, double itemX, double itemY, double itemWidth, double itemHeight, float scale) {
+
         // Calculate the bounds of the item
         if (mouseX == lastMouseX && mouseY == lastMouseY) {
             return lastMouseState;
@@ -80,6 +82,10 @@ public class SharedFunctions {
         RenderSystem.setShaderTexture(0, texture);
         GuiComponent.blit(poseStack, x, y, width, height, width, height, width, height);
         poseStack.popPose();
+    }
+
+    public static ItemStack getItemStack(String item) {
+        return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(item)));
     }
 
 

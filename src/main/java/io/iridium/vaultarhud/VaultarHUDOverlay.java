@@ -1,12 +1,10 @@
 package io.iridium.vaultarhud;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import io.iridium.vaultarhud.event.ClientEvents;
 import io.iridium.vaultarhud.networking.ModMessages;
 import io.iridium.vaultarhud.networking.packet.ClientRequestsVaultarDataC2SPacket;
 import io.iridium.vaultarhud.renderers.HUDInGameRenderer;
 import io.iridium.vaultarhud.renderers.HUDInventoryRenderer;
-import io.iridium.vaultarhud.renderers.ScalableItemRenderer;
 import io.iridium.vaultarhud.util.Point;
 import io.iridium.vaultarhud.util.ScreenValidator;
 import net.minecraft.client.Minecraft;
@@ -14,8 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,7 +21,6 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.List;
@@ -97,7 +92,9 @@ public class VaultarHUDOverlay {
 
         HUDInGameRenderer.render(event.getMatrixStack(), new Point(-1, 0));
 
+
     }
+
 
     @SubscribeEvent
     public static void onGUIScreenDraw(ScreenEvent.DrawScreenEvent.Post event){
@@ -120,15 +117,15 @@ public class VaultarHUDOverlay {
         }
 
         if (visibilityMode == 2){
+
             HUDInventoryRenderer.render(event.getPoseStack(), null);
             return;
         }
 
         HUDInGameRenderer.render(event.getPoseStack(), new Point(2, 0));
 
+
     }
-
-
 
 
 
