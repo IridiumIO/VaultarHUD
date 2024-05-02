@@ -1,20 +1,15 @@
 package io.iridium.vaultarhud;
 
-import iskallia.vault.altar.AltarInfusionRecipe;
 import iskallia.vault.altar.RequiredItems;
 import iskallia.vault.world.data.PlayerVaultAltarData;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 import static io.iridium.vaultarhud.util.SharedFunctions.getItemStackFromTag;
 
