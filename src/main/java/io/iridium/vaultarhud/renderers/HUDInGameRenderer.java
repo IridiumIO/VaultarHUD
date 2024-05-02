@@ -35,7 +35,7 @@ public class HUDInGameRenderer{
                 //Define the spacing between each rendered element
                 int elementSpacing = Math.round(42 * scale);
 
-                // Calculate starting coordinates for rendering; in this case, on the right side of the screen centered vertically
+                // Calculate starting coordinates for rendering; in this case, on the right side of the screen centered vertically when outside the inventory, or on the left side when inside the inventory (origin.X = -1)
                 int screenWidth = minecraft.getWindow().getGuiScaledWidth();
                 int screenHeight = minecraft.getWindow().getGuiScaledHeight();
                 double x = (origin.getX() == -1)? screenWidth - Math.round(135 * scale) : origin.getX();

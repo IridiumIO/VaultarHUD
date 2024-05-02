@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 public class VaultarHud {
 
     public static final String MOD_ID = "vaultarhud";
-
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public VaultarHud() {
