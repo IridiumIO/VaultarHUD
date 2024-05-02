@@ -6,7 +6,7 @@ Adds a HUD opposite the bounty table HUD (when you press `Tab`) that shows a sim
 
 **Installation:**
  - Drop the jar file into your `mods` folder and restart the game. 
- - Press and hold `TAB` in game after you right-click an altar. 
+ - Press and hold `TAB` in game, or open any inventory screen. Can be toggled using `0` by default (hotkeys can be changed in the standard keybinding screen)
 
 
 Also works on multiplayer servers _even if the server doesn't have the mod installed_
@@ -15,9 +15,9 @@ Also works on multiplayer servers _even if the server doesn't have the mod insta
 
 
 **Todo:**
-- Add alternative condensed view similar to the script version, and configuration option to switch between them / show up in your inventory
-- Possibly add a second overlayed progress bar in a different colour that counts items that match in your inventory
-- Rebindable hotkey for showing the HUD
 - Allow switching between your altar and another player's altar
 
 ![image](https://github.com/IridiumIO/VaultarHUD/assets/1491536/d50a6c43-7806-416f-9ae1-a6206f5220d8)
+
+
+Download from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/vaultarhud) or [Modrinth](https://modrinth.com/mod/vaultarhud)
