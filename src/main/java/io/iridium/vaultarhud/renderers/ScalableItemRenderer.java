@@ -23,6 +23,8 @@ import static io.iridium.vaultarhud.util.SharedFunctions.getBakedModel;
 public class ScalableItemRenderer {
 
         private static Minecraft minecraft = Minecraft.getInstance();
+        private static MultiBufferSource.BufferSource bufferSource = minecraft.renderBuffers().bufferSource();
+        private static PoseStack blockPoseStack = new PoseStack();
 
         public static void render(ItemStack itemStack, Point renderOrigin, float scale){
                 render(itemStack, renderOrigin, scale, false, false, false);
@@ -53,7 +55,6 @@ public class ScalableItemRenderer {
                 poseStack.scale(16.0F * scale, 16.0F * scale, 16.0F * scale);
                 RenderSystem.applyModelViewMatrix();
 
-                PoseStack blockPoseStack = new PoseStack();
                 blockPoseStack.pushPose();
 
 
@@ -66,7 +67,6 @@ public class ScalableItemRenderer {
                 }
 
 
-                MultiBufferSource.BufferSource multibuffersource$buffersource = minecraft.renderBuffers().bufferSource();
                 boolean flag = !pBakedModel.usesBlockLight();
                 if (flag) {
                         Lighting.setupForFlatItems();
@@ -76,8 +76,8 @@ public class ScalableItemRenderer {
                         itemStack.enchant(Enchantment.byId(1), 1);
                 }
 
-                renderer.render(itemStack, ItemTransforms.TransformType.GUI, false, blockPoseStack, multibuffersource$buffersource, 15728880, OverlayTexture.NO_OVERLAY, pBakedModel);
-                multibuffersource$buffersource.endBatch();
+                renderer.render(itemStack, ItemTransforms.TransformType.GUI, false, blockPoseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY, pBakedModel);
+                bufferSource.endBatch();
                 RenderSystem.enableDepthTest();
                 if (flag) {
                         Lighting.setupFor3DItems();

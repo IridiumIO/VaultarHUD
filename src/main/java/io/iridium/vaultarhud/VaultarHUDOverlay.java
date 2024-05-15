@@ -33,9 +33,7 @@ public class VaultarHUDOverlay {
     private static long lastChangeTime = 0;
     public static int TICKER = 0;
     public static boolean isVisible = false;
-
-    // 0 = Off, 1 = Regular Inventory HUD on left side, 2 = Small Inventory HUD
-    public static int visibilityMode = 1;
+    public static int visibilityMode = 1; // 0 = Off, 1 = Regular Inventory HUD on left side, 2 = Small Inventory HUD
     private static Minecraft minecraft = Minecraft.getInstance();
 
 
@@ -61,6 +59,7 @@ public class VaultarHUDOverlay {
 
         if (visibilityMode == 0 || !isVisible || (event.getType() != RenderGameOverlayEvent.ElementType.ALL)) return;
         updateVaultarItems();
+        if (vaultarItems.isEmpty()) return;
         HUDInGameRenderer.render(event.getMatrixStack(), new Point(-1, 0));
 
     }
@@ -71,6 +70,7 @@ public class VaultarHUDOverlay {
 
         if (visibilityMode == 0 || !ScreenValidator.isValidScreen(event.getScreen())) return;
         updateVaultarItems();
+        if (vaultarItems.isEmpty()) return;
         if (visibilityMode == 2){
             HUDInventoryRenderer.render(event.getPoseStack(), null);
         }else {

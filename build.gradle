@@ -18,7 +18,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '0.0.8-1.18.2'
+version = '0.0.9-1.18.2'
 group = 'io.iridium.vaultarhud' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'vaultarhud'
 
@@ -161,6 +161,7 @@ dependencies {
     compileOnly name: 'sophisticatedcore-1.18.2-0.5.48.244'
     compileOnly name: 'CyclopsCore-1.18.2-1.16.1'
     compileOnly name: 'SimpleStorageNetwork-1.18.2-1.6.2'
+    compileOnly name: 'cofh_core-1.18.2-9.1.2.32'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency

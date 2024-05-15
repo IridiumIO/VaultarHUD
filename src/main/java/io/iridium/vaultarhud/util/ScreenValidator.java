@@ -10,6 +10,7 @@ import net.p3pp3rf1y.sophisticatedcore.client.gui.StorageScreenBase;
 import org.cyclops.cyclopscore.client.gui.container.ContainerScreenExtended;
 import com.lothrazar.storagenetwork.block.inventory.ScreenNetworkInventory;
 import com.lothrazar.storagenetwork.block.request.ScreenNetworkTable;
+import cofh.core.client.gui.ContainerScreenCoFH;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +46,10 @@ public class ScreenValidator {
             ScreenNetworkTable.class
     );
 
+    public static final List<Class<? extends Screen>> THERMAL_SCREENS = Arrays.asList(
+            ContainerScreenCoFH.class
+    );
+
 
     public static boolean isValidScreen(Screen screen){
         return isScreenInList(screen, VANILLA_SCREENS) ||
@@ -52,7 +57,8 @@ public class ScreenValidator {
                 isScreenInList(screen, SOPHISTICATED_BACKPACK_SCREENS) ||
                 isScreenInList(screen, AE2_SCREENS) ||
                 isScreenInList(screen, COLOSSALCHEST_SCREENS) ||
-                isScreenInList(screen, SSN_SCREENS);
+                isScreenInList(screen, SSN_SCREENS) ||
+                isScreenInList(screen, THERMAL_SCREENS);
     }
 
     public static boolean isScreenInList(Screen screen, List<Class<? extends Screen>> screenList){
@@ -82,7 +88,7 @@ public class ScreenValidator {
             y = ((screenHeight + gs.getYSize()) / 2) - offset.getY() -1;
         }
 
-        if (isScreenInList(screen, AE2_SCREENS) || isScreenInList(screen, COLOSSALCHEST_SCREENS) || isScreenInList(screen, SSN_SCREENS)){
+        if (isScreenInList(screen, AE2_SCREENS) || isScreenInList(screen, COLOSSALCHEST_SCREENS) || isScreenInList(screen, SSN_SCREENS) || isScreenInList(screen, THERMAL_SCREENS)){
             AbstractContainerScreen gs = (AbstractContainerScreen) screen;
             x = ((screenWidth - gs.getXSize()) / 2) - offset.getX();
             y = ((screenHeight + gs.getYSize()) / 2) - offset.getY();
