@@ -7,6 +7,7 @@ import io.iridium.vaultarhud.VaultarHud;
 import io.iridium.vaultarhud.VaultarItem;
 import io.iridium.vaultarhud.util.Point;
 import iskallia.vault.client.ClientPartyData;
+import iskallia.vault.util.InventoryUtil;
 import iskallia.vault.world.data.VaultPartyData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -30,6 +31,24 @@ public class HUDInGameRenderer{
         private static ResourceLocation hudTexture2 = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_2.png");
 
 
+        private static long LAST_CHECKED_TIME = 0;
+        private static Map<Item, Integer> InventoryItems = new HashMap<>();
+        private static Map<Item,Integer> GetPlayerInventoryItems(LocalPlayer player){
+                if(System.currentTimeMillis() - LAST_CHECKED_TIME < 1000) return InventoryItems;
+                LAST_CHECKED_TIME = System.currentTimeMillis();
+                InventoryItems.clear();
+
+                for (InventoryUtil.ItemAccess items : InventoryUtil.findAllItems(player)) {
+                        ItemStack stack = items.getStack();
+                        if (!stack.isEmpty()) {
+                                Item key = stack.getItem();
+                                InventoryItems.put(key, InventoryItems.getOrDefault(stack.getItem(), 0) + stack.getCount());
+                        }
+                }
+
+                return InventoryItems;
+        }
+
         public static void render(PoseStack poseStack, Point origin) {
 
                 // Set the color and enable transparency
@@ -50,14 +69,7 @@ public class HUDInGameRenderer{
 
                 LocalPlayer player = minecraft.player;
 
-                Map<Item, Integer> inventoryItems = new HashMap<>();
-
-                for (ItemStack stack : player.getInventory().items) {
-                        if (!stack.isEmpty()) {
-                                Item key = stack.getItem();
-                                inventoryItems.put(key, inventoryItems.getOrDefault(stack.getItem(), 0) + stack.getCount());
-                        }
-                }
+                Map<Item, Integer> inventoryItems = GetPlayerInventoryItems(player);
 
 //                for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
 //                        ItemStack stack = player.getInventory().getItem(i);
