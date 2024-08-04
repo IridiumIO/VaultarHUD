@@ -1,11 +1,13 @@
 package io.iridium.vaultarhud;
 
 import com.mojang.logging.LogUtils;
+import io.iridium.vaultarhud.config.VaultarHudClientConfigs;
 import io.iridium.vaultarhud.networking.ModMessages;
 import io.iridium.vaultarhud.networking.packet.HandshakeCheckModIsOnServerC2SPacket;
 import io.iridium.vaultarhud.util.KeyBindings;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -26,6 +28,9 @@ public class VaultarHud {
         modEventBus.addListener(this::clientSetup);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
+
+        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, VaultarHudClientConfigs.CLIENT_CONFIG, "vaultarhud-client.toml");
+
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

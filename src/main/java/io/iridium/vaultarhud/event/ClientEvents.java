@@ -41,7 +41,7 @@ public class ClientEvents {
 
             if (KeyBindings.ENABLE_HUD.consumeClick()) {
 
-                VaultarHUDOverlay.visibilityMode = (VaultarHUDOverlay.visibilityMode + 1) % 3;
+                VaultarHUDOverlay.isHUDEnabled = !VaultarHUDOverlay.isHUDEnabled;
 
             }
 
@@ -63,7 +63,7 @@ public class ClientEvents {
 
             if (KeyBindings.ENABLE_HUD.matches(event.getKeyCode(), 0)) {
 
-                VaultarHUDOverlay.visibilityMode = (VaultarHUDOverlay.visibilityMode + 1) % 3;
+                VaultarHUDOverlay.isHUDEnabled = !VaultarHUDOverlay.isHUDEnabled;
 
             }
         }
