@@ -10,10 +10,16 @@ import iskallia.vault.client.ClientPartyData;
 import iskallia.vault.world.data.VaultPartyData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static io.iridium.vaultarhud.util.SharedFunctions.renderBackground;
 
@@ -41,10 +47,40 @@ public class HUDInGameRenderer{
                 double x = (origin.getX() == -1)? screenWidth - Math.round(135 * scale) : origin.getX();
                 int y = CalculateYOffsetIfPartyVisible(screenHeight, elementSpacing);
 
+                LocalPlayer player = minecraft.player;
+
+                Map<Item, Integer> inventoryItems = new HashMap<>();
+
+                for (ItemStack stack : player.getInventory().items) {
+                        if (!stack.isEmpty()) {
+                                Item key = stack.getItem();
+                                inventoryItems.put(key, inventoryItems.getOrDefault(stack.getItem(), 0) + stack.getCount());
+                        }
+                }
+
+//                for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+//                        ItemStack stack = player.getInventory().getItem(i);
+//                        if (!stack.isEmpty()) {
+//                                Item key = stack.getItem();
+//                                inventoryItems.put(key, inventoryItems.getOrDefault(stack.getItem(), 0) + stack.getCount());
+//                        }
+//                }
 
                 // Render each item
                 for (VaultarItem item : VaultarHUDOverlay.vaultarItems) {
-                        RenderMainHUDCompositeElement(poseStack, (int) x, y, item.getCurrentItem(VaultarHUDOverlay.TICKER), item.getCountCompleted(), item.getCountTotal(), 1.0F);
+
+                        List<ItemStack> suitableItems = item.items;
+
+                        int totalSuitableItemsInInventory = 0;
+
+                        for (ItemStack stack : suitableItems) {
+                                Item key = stack.getItem();
+                                if (inventoryItems.containsKey(key)) {
+                                        totalSuitableItemsInInventory += inventoryItems.get(key);
+                                }
+                        }
+
+                        RenderMainHUDCompositeElement(poseStack, (int) x, y, item.getCurrentItem(VaultarHUDOverlay.TICKER), item.getCountCompleted(), item.getCountTotal(), totalSuitableItemsInInventory,1.0F);
                         y += elementSpacing;
                 }
 
@@ -55,7 +91,7 @@ public class HUDInGameRenderer{
         }
 
 
-        private static void RenderMainHUDCompositeElement(PoseStack poseStack, int x, int y, ItemStack itemStack, int countCompleted, int countTotal, float scale){
+        private static void RenderMainHUDCompositeElement(PoseStack poseStack, int x, int y, ItemStack itemStack, int countCompleted, int countTotal, int inventoryTotal, float scale){
 
                 poseStack.pushPose();
                 poseStack.translate(x, y, 100.0F);
@@ -73,11 +109,19 @@ public class HUDInGameRenderer{
 
 
                 // Center the item count text and draw it and the progress bar
-                String text_count = countCompleted + "/" + countTotal;
+                String text_count =  countCompleted + "/" + countTotal;
                 int stringWidth = minecraft.font.width(text_count);
                 int xOffset = x + 65 - stringWidth / 2;
+
+                GuiComponent.fill(poseStack, x + 6, y + 29, (int) Math.floor((x + 6) + ((float) Math.min(countCompleted + inventoryTotal, countTotal) / countTotal * 118)), y + 34, 0xFFd38b06);
                 GuiComponent.fill(poseStack, x + 6, y + 29, (int) Math.floor((x + 6) + ((float) countCompleted / countTotal * 118)), y + 34, 0xFF00FF00);
+
                 minecraft.font.drawShadow(poseStack, new TextComponent(text_count), xOffset, y + 27, 0xFFFFFF);
+
+                if (inventoryTotal > 0 && countCompleted < countTotal){
+                        String text_inv = "(" + inventoryTotal + ")";
+                        minecraft.font.drawShadow(poseStack, new TextComponent(text_inv), x+6, y + 27, 0xFFFFFF);
+                }
 
                 // Draw the item name, shrinking its size if it is too long
                 String text_name = itemStack.getHoverName().getString();

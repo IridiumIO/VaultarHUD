@@ -14,9 +14,10 @@ import java.util.List;
 import static io.iridium.vaultarhud.util.SharedFunctions.getItemStackFromTag;
 
 public class VaultarItem {
-    private List<ItemStack> items;
+    public List<ItemStack> items;
     private int countTotal;
     private int countCompleted;
+    public int countInventory;
 
     public VaultarItem(List<ItemStack> items, int countCompleted, int countTotal) {
         this.items = items;
@@ -43,7 +44,6 @@ public class VaultarItem {
     public int getCountTotal() {
         return countTotal;
     }
-
 
     public static List<VaultarItem> getVaultarItems(ServerPlayer player) {
 

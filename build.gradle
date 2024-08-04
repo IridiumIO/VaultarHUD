@@ -18,7 +18,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '0.0.9-1.18.2'
+version = '0.0.10-1.18.2'
 group = 'io.iridium.vaultarhud' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'vaultarhud'
 
@@ -142,7 +142,9 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
+    maven {
+        url "https://cursemaven.com"
+    }
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
      flatDir {
          dir 'libs'
@@ -155,13 +157,13 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.9'
 
-    compileOnly name: 'the_vault-1.18.2-3.11.0.3011'
-    compileOnly name: 'refinedstorage-1.10.6'
-    compileOnly name: 'appliedenergistics2-forge-11.7.0'
-    compileOnly name: 'sophisticatedcore-1.18.2-0.5.48.244'
-    compileOnly name: 'CyclopsCore-1.18.2-1.16.1'
-    compileOnly name: 'SimpleStorageNetwork-1.18.2-1.6.2'
-    compileOnly name: 'cofh_core-1.18.2-9.1.2.32'
+    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:5076087")
+    implementation fg.deobf("curse.maven:refined-storage-243076:4902316")
+    implementation fg.deobf("curse.maven:applied-energistics-2-223794:4136407")
+    implementation fg.deobf("curse.maven:sophisticated-core-618298:4489807")
+    implementation fg.deobf("curse.maven:cyclops-core-232758:4162660")
+    implementation fg.deobf("curse.maven:simple-storage-network-268495:3868680")
+    implementation fg.deobf("curse.maven:cofh-core-69162:4202941")
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency

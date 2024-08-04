@@ -6,6 +6,8 @@ import io.iridium.vaultarhud.networking.ModMessages;
 import io.iridium.vaultarhud.networking.packet.HandshakeCheckModIsOnServerC2SPacket;
 import io.iridium.vaultarhud.util.KeyBindings;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.InputEvent;
