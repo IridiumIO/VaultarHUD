@@ -47,7 +47,6 @@ public class HUDInGameRenderer{
                 double x = (origin.getX() == -1)? screenWidth - Math.round(135 * scale) : origin.getX();
 
                 boolean isLeftSideRender = origin.getX() == 2;
-                int y = CalculateYOffsetIfPartyVisible(screenHeight, elementSpacing, isLeftSideRender);
 
                 LocalPlayer player = minecraft.player;
 
@@ -68,6 +67,14 @@ public class HUDInGameRenderer{
 //                        }
 //                }
 
+
+                int itemsToRender = (int) VaultarHUDOverlay.vaultarItems.stream()
+                        .filter(item -> item.getCountCompleted() != item.getCountTotal())
+                        .count();
+
+                int y = CalculateYOffsetIfPartyVisible(screenHeight, elementSpacing, isLeftSideRender, itemsToRender);
+
+
                 // Render each item
                 for (VaultarItem item : VaultarHUDOverlay.vaultarItems) {
 
@@ -82,8 +89,12 @@ public class HUDInGameRenderer{
                                 }
                         }
 
-                        RenderMainHUDCompositeElement(poseStack, (int) x, y, item.getCurrentItem(VaultarHUDOverlay.TICKER), item.getCountCompleted(), item.getCountTotal(), totalSuitableItemsInInventory,1.0F);
-                        y += elementSpacing;
+                        if (item.getCountCompleted() != item.getCountTotal()){
+                                RenderMainHUDCompositeElement(poseStack, (int) x, y, item.getCurrentItem(VaultarHUDOverlay.TICKER), item.getCountCompleted(), item.getCountTotal(), totalSuitableItemsInInventory,1.0F);
+                                y += elementSpacing;
+                        }
+
+
                 }
 
 
@@ -95,6 +106,12 @@ public class HUDInGameRenderer{
 
         private static void RenderMainHUDCompositeElement(PoseStack poseStack, int x, int y, ItemStack itemStack, int countCompleted, int countTotal, int inventoryTotal, float scale){
 
+
+                if (countCompleted == countTotal){
+                        itemStack.enchant(Enchantment.byId(1), 1);
+                        return;
+                }
+
                 poseStack.pushPose();
                 poseStack.translate(x, y, 100.0F);
                 poseStack.scale(scale, scale, 1.0F);
@@ -104,9 +121,6 @@ public class HUDInGameRenderer{
                 renderBackground(poseStack, x, y, 130, 38, hudTexture2);
 
                 // Draw the item icon
-                if (countCompleted == countTotal){
-                        itemStack.enchant(Enchantment.byId(1), 1);
-                }
                 ScalableItemRenderer.render(itemStack, new Point(x + 6 * scale , y + 5 * scale), scale );
 
 
@@ -149,7 +163,7 @@ public class HUDInGameRenderer{
 
 
 
-        private static int CalculateYOffsetIfPartyVisible(int screenHeight, int elementSpacing, boolean ignoreParty){
+        private static int CalculateYOffsetIfPartyVisible(int screenHeight, int elementSpacing, boolean ignoreParty, int itemsToRender){
                 int y = screenHeight / 2 - (elementSpacing * VaultarHUDOverlay.vaultarItems.size() / 2);
 
                 VaultPartyData.Party party = ClientPartyData.getParty(minecraft.player.getUUID());
@@ -158,7 +172,10 @@ public class HUDInGameRenderer{
                         int partySize = party.getMembers().size();
                         y = (int)Math.max(screenHeight/3.0F, 42.0F);
                         y += (partySize) * 12 + 14;
+                }else {
+                        y += (elementSpacing * (4-itemsToRender) / 2);
                 }
+
 
                 //Sanity check so that the HUD doesn't render off the screen if the party is too large
                 return Math.min(y, screenHeight - (elementSpacing * VaultarHUDOverlay.vaultarItems.size()) - 20);
