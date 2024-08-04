@@ -115,8 +115,11 @@ public class HUDInGameRenderer{
                 int stringWidth = minecraft.font.width(text_count);
                 int xOffset = x + 65 - stringWidth / 2;
 
-                GuiComponent.fill(poseStack, x + 6, y + 29, (int) Math.floor((x + 6) + ((float) Math.min(countCompleted + inventoryTotal, countTotal) / countTotal * 118)), y + 34, 0xFFd38b06);
-                GuiComponent.fill(poseStack, x + 6, y + 29, (int) Math.floor((x + 6) + ((float) countCompleted / countTotal * 118)), y + 34, 0xFF00FF00);
+                float progressOrange = (countTotal != 0) ? ((float) Math.min(countCompleted + inventoryTotal, countTotal) / countTotal * 118) : 0;
+                float progressGreen = (countTotal != 0) ? ((float) countCompleted / countTotal * 118) : 118;
+
+                GuiComponent.fill(poseStack, x + 6, y + 29, (int) Math.floor((x + 6) + progressOrange), y + 34, 0xFFd38b06);
+                GuiComponent.fill(poseStack, x + 6, y + 29, (int) Math.floor((x + 6) + progressGreen), y + 34, 0xFF00FF00);
 
                 minecraft.font.drawShadow(poseStack, new TextComponent(text_count), xOffset, y + 27, 0xFFFFFF);
 
