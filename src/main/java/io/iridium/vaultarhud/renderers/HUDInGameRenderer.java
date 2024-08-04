@@ -45,7 +45,9 @@ public class HUDInGameRenderer{
                 int screenWidth = minecraft.getWindow().getGuiScaledWidth();
                 int screenHeight = minecraft.getWindow().getGuiScaledHeight();
                 double x = (origin.getX() == -1)? screenWidth - Math.round(135 * scale) : origin.getX();
-                int y = CalculateYOffsetIfPartyVisible(screenHeight, elementSpacing);
+
+                boolean isLeftSideRender = origin.getX() == 2;
+                int y = CalculateYOffsetIfPartyVisible(screenHeight, elementSpacing, isLeftSideRender);
 
                 LocalPlayer player = minecraft.player;
 
@@ -144,12 +146,12 @@ public class HUDInGameRenderer{
 
 
 
-        private static int CalculateYOffsetIfPartyVisible(int screenHeight, int elementSpacing){
+        private static int CalculateYOffsetIfPartyVisible(int screenHeight, int elementSpacing, boolean ignoreParty){
                 int y = screenHeight / 2 - (elementSpacing * VaultarHUDOverlay.vaultarItems.size() / 2);
 
                 VaultPartyData.Party party = ClientPartyData.getParty(minecraft.player.getUUID());
 
-                if (party != null){
+                if (party != null && !ignoreParty){
                         int partySize = party.getMembers().size();
                         y = (int)Math.max(screenHeight/3.0F, 42.0F);
                         y += (partySize) * 12 + 14;
