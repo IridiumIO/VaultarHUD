@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -34,7 +35,7 @@ public class HUDInGameRenderer{
         private static long LAST_CHECKED_TIME = 0;
         private static Map<Item, Integer> InventoryItems = new HashMap<>();
         private static Map<Item,Integer> GetPlayerInventoryItems(LocalPlayer player){
-                if(System.currentTimeMillis() - LAST_CHECKED_TIME < 1000) return InventoryItems;
+                if(System.currentTimeMillis() - LAST_CHECKED_TIME < 200) return InventoryItems;
                 LAST_CHECKED_TIME = System.currentTimeMillis();
                 InventoryItems.clear();
 
@@ -70,15 +71,6 @@ public class HUDInGameRenderer{
                 LocalPlayer player = minecraft.player;
 
                 Map<Item, Integer> inventoryItems = GetPlayerInventoryItems(player);
-
-//                for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-//                        ItemStack stack = player.getInventory().getItem(i);
-//                        if (!stack.isEmpty()) {
-//                                Item key = stack.getItem();
-//                                inventoryItems.put(key, inventoryItems.getOrDefault(stack.getItem(), 0) + stack.getCount());
-//                        }
-//                }
-
 
                 int itemsToRender = (int) VaultarHUDOverlay.vaultarItems.stream()
                         .filter(item -> item.getCountCompleted() != item.getCountTotal())

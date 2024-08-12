@@ -109,7 +109,7 @@ public class VaultarHUDOverlay {
             Level world = minecraft.player.level;
 
             if (world.dimension() != Level.OVERWORLD && world.dimension() != Level.NETHER && world.dimension() != Level.END){
-                VaultarHud.LOGGER.info("VaultarHUDOverlay: Player is not in the overworld, nether, or end dimension. Cancelling update.");
+                //VaultarHud.LOGGER.info("VaultarHUDOverlay: Player is not in the overworld, nether, or end dimension. Cancelling update.");
                 return;
             }
 
