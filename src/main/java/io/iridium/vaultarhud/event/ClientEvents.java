@@ -4,6 +4,7 @@ import io.iridium.vaultarhud.VaultarHUDOverlay;
 import io.iridium.vaultarhud.VaultarHud;
 import io.iridium.vaultarhud.networking.ModMessages;
 import io.iridium.vaultarhud.networking.packet.HandshakeCheckModIsOnServerC2SPacket;
+import io.iridium.vaultarhud.renderers.HUDInventoryRenderer;
 import io.iridium.vaultarhud.util.KeyBindings;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,6 +16,10 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class ClientEvents {
     public static ModMode mode = ModMode.CLIENTONLY;
 
@@ -23,6 +28,7 @@ public class ClientEvents {
 
     @Mod.EventBusSubscriber(modid = VaultarHud.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
+        private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 
         @SubscribeEvent
@@ -65,6 +71,16 @@ public class ClientEvents {
 
                 VaultarHUDOverlay.isHUDEnabled = !VaultarHUDOverlay.isHUDEnabled;
 
+            }
+        }
+
+
+        @SubscribeEvent
+        public static void onMouseEvent(ScreenEvent.MouseClickedEvent event) {
+            if(event.getButton() == 0 ) {
+                HUDInventoryRenderer.hasMouseClicked = true;
+
+                scheduler.schedule(() -> HUDInventoryRenderer.hasMouseClicked = false, 100, TimeUnit.MILLISECONDS);
             }
         }
 
