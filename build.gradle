@@ -157,7 +157,7 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.9'
 
-    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:5076087")
+    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:5631250")
     implementation fg.deobf("curse.maven:refined-storage-243076:4902316")
     implementation fg.deobf("curse.maven:applied-energistics-2-223794:4136407")
     implementation fg.deobf("curse.maven:sophisticated-core-618298:4489807")
@@ -215,3 +215,25 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
+task copyMostRecentFile {
+    doLast {
+        def sourceDir = file('build/libs')
+        def destDir = file(System.getenv('APPDATA') + '\\ATLauncher\\instances\\VaultHunters3rdEditionVanilla\\mods')
+
+        // Find the most recent file
+        def mostRecentFile = sourceDir.listFiles().max { it.lastModified() }
+
+        if (mostRecentFile) {
+            copy {
+                from mostRecentFile
+                into destDir
+            }
+            println "Copied ${mostRecentFile.name} to ${destDir}"
+        } else {
+            println "No files found in ${sourceDir}"
+        }
+    }
+}
+
+// Ensure the task runs after the build
+build.finalizedBy(copyMostRecentFile)
