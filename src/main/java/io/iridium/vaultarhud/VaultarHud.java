@@ -21,6 +21,8 @@ public class VaultarHud {
     public static final String MOD_ID = "vaultarhud";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    public static final Boolean ISDEBUG = true;
+
     public VaultarHud() {
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

@@ -157,13 +157,13 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.9'
 
-    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:5631250")
-    implementation fg.deobf("curse.maven:refined-storage-243076:4902316")
-    implementation fg.deobf("curse.maven:applied-energistics-2-223794:4136407")
-    implementation fg.deobf("curse.maven:sophisticated-core-618298:4489807")
-    implementation fg.deobf("curse.maven:cyclops-core-232758:4162660")
-    implementation fg.deobf("curse.maven:simple-storage-network-268495:3868680")
-    implementation fg.deobf("curse.maven:cofh-core-69162:4202941")
+    compileOnly fg.deobf("curse.maven:vault-hunters-official-mod-458203:5631250")
+    compileOnly fg.deobf("curse.maven:refined-storage-243076:4902316")
+    compileOnly fg.deobf("curse.maven:applied-energistics-2-223794:4136407")
+    compileOnly fg.deobf("curse.maven:sophisticated-core-618298:4489807")
+    compileOnly fg.deobf("curse.maven:cyclops-core-232758:4162660")
+    compileOnly fg.deobf("curse.maven:simple-storage-network-268495:3868680")
+    compileOnly fg.deobf("curse.maven:cofh-core-69162:4202941")
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency

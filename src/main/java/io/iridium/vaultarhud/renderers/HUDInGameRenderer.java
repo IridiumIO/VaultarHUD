@@ -7,6 +7,7 @@ import io.iridium.vaultarhud.VaultarHud;
 import io.iridium.vaultarhud.VaultarItem;
 import io.iridium.vaultarhud.util.Point;
 import iskallia.vault.client.ClientPartyData;
+import iskallia.vault.core.vault.Vault;
 import iskallia.vault.util.InventoryUtil;
 import iskallia.vault.world.data.VaultPartyData;
 import net.minecraft.client.Minecraft;
@@ -17,12 +18,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.iridium.vaultarhud.util.SharedFunctions.renderBackground;
+import static io.iridium.vaultarhud.util.SharedFunctions.*;
 
 public class HUDInGameRenderer{
 
@@ -32,22 +34,11 @@ public class HUDInGameRenderer{
 
 
         private static long LAST_CHECKED_TIME = 0;
+
+
         private static Map<Item, Integer> InventoryItems = new HashMap<>();
-        public static Map<Item,Integer> GetPlayerInventoryItems(LocalPlayer player){
-                if(System.currentTimeMillis() - LAST_CHECKED_TIME < 200) return InventoryItems;
-                LAST_CHECKED_TIME = System.currentTimeMillis();
-                InventoryItems.clear();
 
-                for (InventoryUtil.ItemAccess items : InventoryUtil.findAllItems(player)) {
-                        ItemStack stack = items.getStack();
-                        if (!stack.isEmpty()) {
-                                Item key = stack.getItem();
-                                InventoryItems.put(key, InventoryItems.getOrDefault(stack.getItem(), 0) + stack.getCount());
-                        }
-                }
 
-                return InventoryItems;
-        }
 
         public static void render(PoseStack poseStack, Point origin) {
 
@@ -69,7 +60,12 @@ public class HUDInGameRenderer{
 
                 LocalPlayer player = minecraft.player;
 
-                Map<Item, Integer> inventoryItems = GetPlayerInventoryItems(player);
+
+                if(!(System.currentTimeMillis() - LAST_CHECKED_TIME < 200)) {
+                        InventoryItems = GetPlayerInventoryItems(player);
+                        LAST_CHECKED_TIME = System.currentTimeMillis();
+                }
+
 
                 int itemsToRender = (int) VaultarHUDOverlay.vaultarItems.stream()
                         .filter(item -> item.getCountCompleted() != item.getCountTotal())
@@ -87,8 +83,8 @@ public class HUDInGameRenderer{
 
                         for (ItemStack stack : suitableItems) {
                                 Item key = stack.getItem();
-                                if (inventoryItems.containsKey(key)) {
-                                        totalSuitableItemsInInventory += inventoryItems.get(key);
+                                if (InventoryItems.containsKey(key)) {
+                                        totalSuitableItemsInInventory += InventoryItems.get(key);
                                 }
                         }
 
@@ -169,7 +165,7 @@ public class HUDInGameRenderer{
         private static int CalculateYOffsetIfPartyVisible(int screenHeight, int elementSpacing, boolean ignoreParty, int itemsToRender){
                 int y = screenHeight / 2 - (elementSpacing * VaultarHUDOverlay.vaultarItems.size() / 2);
 
-                VaultPartyData.Party party = ClientPartyData.getParty(minecraft.player.getUUID());
+                VaultPartyData.Party party = VaultarHud.ISDEBUG ? null : ClientPartyData.getParty(minecraft.player.getUUID());
 
                 if (party != null && !ignoreParty){
                         int partySize = party.getMembers().size();

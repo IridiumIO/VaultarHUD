@@ -1,16 +1,9 @@
 package io.iridium.vaultarhud.util;
 
-import appeng.client.gui.me.common.MEStorageScreen;
-import appeng.client.gui.me.items.CraftingTermScreen;
-import com.refinedmods.refinedstorage.screen.grid.GridScreen;
+import io.iridium.vaultarhud.VaultarHud;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.*;
-import net.p3pp3rf1y.sophisticatedcore.client.gui.StorageScreenBase;
-import org.cyclops.cyclopscore.client.gui.container.ContainerScreenExtended;
-import com.lothrazar.storagenetwork.block.inventory.ScreenNetworkInventory;
-import com.lothrazar.storagenetwork.block.request.ScreenNetworkTable;
-import cofh.core.client.gui.ContainerScreenCoFH;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,30 +17,30 @@ public class ScreenValidator {
             FurnaceScreen.class
     );
 
-    public static final List<Class<? extends Screen>> RS_SCREENS = Arrays.asList(
-            GridScreen.class
+    public static final List<Class<? extends Screen>> RS_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
+            com.refinedmods.refinedstorage.screen.grid.GridScreen.class
     );
 
-    public static final List<Class<? extends Screen>> SOPHISTICATED_BACKPACK_SCREENS = Arrays.asList(
-            StorageScreenBase.class
+    public static final List<Class<? extends Screen>> SOPHISTICATED_BACKPACK_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
+            net.p3pp3rf1y.sophisticatedcore.client.gui.StorageScreenBase.class
     );
 
-    public static final List<Class<? extends Screen>> AE2_SCREENS = Arrays.asList(
-            MEStorageScreen.class,
-            CraftingTermScreen.class
+    public static final List<Class<? extends Screen>> AE2_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
+            appeng.client.gui.me.common.MEStorageScreen.class,
+            appeng.client.gui.me.items.CraftingTermScreen.class
     );
 
-    public static final List<Class<? extends Screen>> COLOSSALCHEST_SCREENS = Arrays.asList(
-            ContainerScreenExtended.class
+    public static final List<Class<? extends Screen>> COLOSSALCHEST_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
+            org.cyclops.cyclopscore.client.gui.container.ContainerScreenExtended.class
     );
 
-    public static final List<Class<? extends Screen>> SSN_SCREENS = Arrays.asList(
-            ScreenNetworkInventory.class,
-            ScreenNetworkTable.class
+    public static final List<Class<? extends Screen>> SSN_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
+            com.lothrazar.storagenetwork.block.inventory.ScreenNetworkInventory.class,
+            com.lothrazar.storagenetwork.block.request.ScreenNetworkTable.class
     );
 
-    public static final List<Class<? extends Screen>> THERMAL_SCREENS = Arrays.asList(
-            ContainerScreenCoFH.class
+    public static final List<Class<? extends Screen>> THERMAL_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
+            cofh.core.client.gui.ContainerScreenCoFH.class
     );
 
 
@@ -62,7 +55,7 @@ public class ScreenValidator {
     }
 
     public static boolean isScreenInList(Screen screen, List<Class<? extends Screen>> screenList){
-        return screenList.stream().anyMatch(cls -> cls.isInstance(screen));
+        return screenList != null && screenList.stream().anyMatch(cls -> cls.isInstance(screen));
     }
 
     public static Point getScreenHUDCoordinates(Screen screen, Point offset){

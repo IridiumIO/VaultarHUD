@@ -20,7 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.List;
 import java.util.Map;
 
-import static io.iridium.vaultarhud.renderers.HUDInGameRenderer.GetPlayerInventoryItems;
+import static io.iridium.vaultarhud.util.SharedFunctions.GetPlayerInventoryItems;
 import static io.iridium.vaultarhud.util.SharedFunctions.isMouseOverItem;
 import static io.iridium.vaultarhud.util.SharedFunctions.renderBackground;
 

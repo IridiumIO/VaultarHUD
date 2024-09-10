@@ -1,5 +1,6 @@
 package io.iridium.vaultarhud.networking.packet;
 
+import io.iridium.vaultarhud.VaultarHud;
 import io.iridium.vaultarhud.VaultarItem;
 import io.iridium.vaultarhud.networking.ModMessages;
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,10 +10,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
 import static io.iridium.vaultarhud.VaultarItem.getVaultarItems;
+import static io.iridium.vaultarhud.util.SharedFunctions.getItemStack;
 
 public class ClientRequestsVaultarDataC2SPacket {
 
@@ -32,21 +35,17 @@ public class ClientRequestsVaultarDataC2SPacket {
 
             ServerPlayer player = context.getSender();
 
-            List<VaultarItem> newItems = getVaultarItems(player);
+            List<VaultarItem> newItems = VaultarHud.ISDEBUG ?
+                    Arrays.asList(
+                            new VaultarItem(Arrays.asList(getItemStack("minecraft:stone"), getItemStack("minecraft:cobblestone"), getItemStack("minecraft:deepslate"), getItemStack("minecraft:cobbled_deepslate")), 5, 25),
+                            new VaultarItem(Arrays.asList(getItemStack("minecraft:cracked_polished_blackstone_bricks")), 14, 232),
+                            new VaultarItem(Arrays.asList(getItemStack("minecraft:birch_log"), getItemStack("minecraft:oak_log"), getItemStack("minecraft:spruce_log")), 4346, 4356),
+                            new VaultarItem(Arrays.asList(getItemStack("minecraft:bamboo")), 128, 2118)
+                    ) :
+                    getVaultarItems(player);
 
 
-            //DEBUGGING
-//            List<VaultarItem> newItems = Arrays.asList(
-//                    new VaultarItem(Arrays.asList(getItemStack("minecraft:stone"), getItemStack("minecraft:cobblestone"), getItemStack("minecraft:deepslate"), getItemStack("minecraft:cobbled_deepslate")), 5, 25),
-//                    new VaultarItem(Arrays.asList(getItemStack("minecraft:cracked_polished_blackstone_bricks")), 14, 232),
-//                    new VaultarItem(Arrays.asList(getItemStack("minecraft:birch_log"), getItemStack("minecraft:oak_log"), getItemStack("minecraft:spruce_log")), 4356, 4356),
-//                    new VaultarItem(Arrays.asList(getItemStack("minecraft:bamboo")), 128, 2118)
-//            );
-
-
-            if (System.currentTimeMillis() - lastPacketTime < PACKET_COOLDOWN) {
-                return;
-            }
+            if (System.currentTimeMillis() - lastPacketTime < PACKET_COOLDOWN) return;
 
             ModMessages.sendToClient(new ServerReturnsVaultarDataS2CPacket(newItems), player);
             lastPacketTime = System.currentTimeMillis();
