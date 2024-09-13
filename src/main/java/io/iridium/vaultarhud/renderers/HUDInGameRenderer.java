@@ -6,9 +6,8 @@ import io.iridium.vaultarhud.VaultarHUDOverlay;
 import io.iridium.vaultarhud.VaultarHud;
 import io.iridium.vaultarhud.VaultarItem;
 import io.iridium.vaultarhud.util.Point;
+import io.iridium.vaultarhud.util.SharedFunctions;
 import iskallia.vault.client.ClientPartyData;
-import iskallia.vault.core.vault.Vault;
-import iskallia.vault.util.InventoryUtil;
 import iskallia.vault.world.data.VaultPartyData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -18,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +28,8 @@ public class HUDInGameRenderer{
 
         private static Minecraft minecraft = Minecraft.getInstance();
 
-        private static ResourceLocation hudTexture2 = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_2.png");
+        private static final ResourceLocation HUD_MAIN_TEX = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_main.png");
+        private static final ResourceLocation HUD_MAIN_DARK_TEX = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_main_dark.png");
 
 
         private static long LAST_CHECKED_TIME = 0;
@@ -38,7 +37,9 @@ public class HUDInGameRenderer{
 
         private static Map<Item, Integer> InventoryItems = new HashMap<>();
 
-
+        public static ResourceLocation getHudTexture() {
+                return SharedFunctions.isDarkModeEnabled() ? HUD_MAIN_DARK_TEX : HUD_MAIN_TEX;
+        }
 
         public static void render(PoseStack poseStack, Point origin) {
 
@@ -93,7 +94,6 @@ public class HUDInGameRenderer{
                                 y += elementSpacing;
                         }
 
-
                 }
 
 
@@ -112,12 +112,12 @@ public class HUDInGameRenderer{
                 }
 
                 poseStack.pushPose();
-                poseStack.translate(x, y, 100.0F);
+                poseStack.translate(x, y, 0.0F);
                 poseStack.scale(scale, scale, 1.0F);
                 poseStack.translate(-x, -y, 0);
 
                 //Draw the background image
-                renderBackground(poseStack, x, y, 130, 38, hudTexture2);
+                renderBackground(poseStack, x, y, 130, 38, getHudTexture());
 
                 // Draw the item icon
                 ScalableItemRenderer.render(itemStack, new Point(x + 6 * scale , y + 5 * scale), scale );

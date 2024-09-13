@@ -7,6 +7,7 @@ import io.iridium.vaultarhud.VaultarHud;
 import io.iridium.vaultarhud.VaultarItem;
 import io.iridium.vaultarhud.util.Point;
 import io.iridium.vaultarhud.util.ScreenValidator;
+import io.iridium.vaultarhud.util.SharedFunctions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.MutableComponent;
@@ -26,8 +27,10 @@ import static io.iridium.vaultarhud.util.SharedFunctions.renderBackground;
 
 public class HUDInventoryRenderer {
 
-        private static ResourceLocation hudInventoryTexture = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_inv.png");
-        private static ResourceLocation hudSmallInventoryTexture = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_inv_small.png");
+        private static final ResourceLocation HUD_INV_TEX = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_inv.png");
+        private static final ResourceLocation HUD_INV_TEX_DARK = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_inv_dark.png");
+        private static final ResourceLocation HUD_SMALL_INV_TEX = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_inv_small.png");
+        private static final ResourceLocation HUD_SMALL_INV_TEX_DARK = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_inv_small_dark.png");
 
         private static Minecraft minecraft = Minecraft.getInstance();
 
@@ -35,6 +38,16 @@ public class HUDInventoryRenderer {
         public static boolean ShowHoverHUD = false;
 
         public static boolean hasMouseClicked = false;
+
+
+        public static ResourceLocation getHudInvTexture() {
+                return SharedFunctions.isDarkModeEnabled() ? HUD_INV_TEX_DARK : HUD_INV_TEX;
+        }
+
+        public static ResourceLocation getHudInvSmallTexture() {
+                return SharedFunctions.isDarkModeEnabled() ? HUD_SMALL_INV_TEX_DARK : HUD_SMALL_INV_TEX;
+        }
+
 
         public static void render(PoseStack poseStack, Point renderOrigin) {
 
@@ -65,7 +78,7 @@ public class HUDInventoryRenderer {
                         y -= 59;
 
                         // Draw the background image
-                        renderBackground(poseStack, x, y, 28, 87, hudInventoryTexture);
+                        renderBackground(poseStack, x, y, 28, 87, getHudInvTexture());
                         RenderCrystal(poseStack, x + 6, y - 19, scale, true);
                         // Render each item
 
@@ -91,7 +104,7 @@ public class HUDInventoryRenderer {
 
                 } else {
                         // Draw the background image
-                        renderBackground(poseStack, x, y, 28, 28, hudSmallInventoryTexture);
+                        renderBackground(poseStack, x, y, 28, 28, getHudInvSmallTexture());
                         RenderAltar(poseStack, x + 6, y + 8, 1.0F);
                         RenderCrystal(poseStack, x + 10, y + 3, 0.5F, false);
                 }
@@ -191,6 +204,7 @@ public class HUDInventoryRenderer {
                 poseStack.popPose();
 
         }
+
 
 
 }

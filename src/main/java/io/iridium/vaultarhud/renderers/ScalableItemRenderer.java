@@ -49,7 +49,8 @@ public class ScalableItemRenderer {
                         y += Math.sin(System.currentTimeMillis() % 4000.0 / 4000.0 * 2.0 * Math.PI) * 3.0;  // Change 5.0 to control the height of the motion
                 }
 
-                poseStack.translate(x , y, 300.0F);
+
+                poseStack.translate(x , y, 100);
                 poseStack.translate(8.0D * scale, 8.0D * scale, 0.0D);
                 poseStack.scale(1.0F, -1.0F, 1.0F);
                 poseStack.scale(16.0F * scale, 16.0F * scale, 16.0F * scale);
@@ -60,8 +61,6 @@ public class ScalableItemRenderer {
 
                 if (isSpinning){
                         float angle = (float) (System.currentTimeMillis() / 15.0 % 340.0);
-
-
                         Quaternion rotation = Vector3f.YP.rotationDegrees(angle);
                         blockPoseStack.mulPose(rotation);
                 }
@@ -83,9 +82,13 @@ public class ScalableItemRenderer {
                         Lighting.setupFor3DItems();
                 }
                 blockPoseStack.popPose();
-
                 poseStack.popPose();
                 RenderSystem.applyModelViewMatrix();
+
+                // Reset buffer source state
+                bufferSource = minecraft.renderBuffers().bufferSource();
+                RenderSystem.disableBlend();
+                RenderSystem.defaultBlendFunc();
 
         }
 }

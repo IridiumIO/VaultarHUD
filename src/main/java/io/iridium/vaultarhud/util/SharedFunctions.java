@@ -114,4 +114,17 @@ public class SharedFunctions {
     }
 
 
+    public static boolean isResourcePackLoaded(String packName) {
+        return minecraft.getResourcePackRepository().getSelectedIds().stream().anyMatch(pack -> pack.equals(packName));
+    }
+
+
+    private static boolean cachedDarkMode = false;
+    private static long lastCheckTime = 0;
+    public static boolean isDarkModeEnabled() {
+        if (System.currentTimeMillis() - lastCheckTime < 10000) return cachedDarkMode;
+        return isResourcePackLoaded("file/Void_Hunters_Dark_UI.zip") || isResourcePackLoaded("file/Void_Hunters_Dark_UI");
+    }
+
+
 }
