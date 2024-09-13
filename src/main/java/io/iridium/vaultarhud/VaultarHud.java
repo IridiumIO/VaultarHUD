@@ -21,7 +21,7 @@ public class VaultarHud {
     public static final String MOD_ID = "vaultarhud";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final Boolean ISDEBUG = true;
+    public static final Boolean ISDEBUG = false;
 
     public VaultarHud() {
 

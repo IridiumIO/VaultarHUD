@@ -18,9 +18,9 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '1.0.0-1.18.2'
+version = '1.1.0-1.18.2'
 group = 'io.iridium.vaultarhud' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'vaultarhud'
+archivesBaseName = 'VaultarHUD'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
