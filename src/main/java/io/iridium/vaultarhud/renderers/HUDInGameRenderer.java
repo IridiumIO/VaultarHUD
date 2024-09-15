@@ -32,12 +32,7 @@ public class HUDInGameRenderer{
         private static final ResourceLocation HUD_MAIN_DARK_TEX = new ResourceLocation(VaultarHud.MOD_ID, "textures/hud_main_dark.png");
 
 
-        private static long LAST_CHECKED_TIME = 0;
-
-
-        private static Map<Item, Integer> InventoryItems = new HashMap<>();
-
-        public static ResourceLocation getHudTexture() {
+    public static ResourceLocation getHudTexture() {
                 return SharedFunctions.isDarkModeEnabled() ? HUD_MAIN_DARK_TEX : HUD_MAIN_TEX;
         }
 
@@ -62,10 +57,7 @@ public class HUDInGameRenderer{
                 LocalPlayer player = minecraft.player;
 
 
-                if(!(System.currentTimeMillis() - LAST_CHECKED_TIME < 200)) {
-                        InventoryItems = GetPlayerInventoryItems(player);
-                        LAST_CHECKED_TIME = System.currentTimeMillis();
-                }
+                 Map<Item, Integer> inventoryItems = GetPlayerInventoryItems(player, 200);
 
 
                 int itemsToRender = (int) VaultarHUDOverlay.vaultarItems.stream()
@@ -84,8 +76,8 @@ public class HUDInGameRenderer{
 
                         for (ItemStack stack : suitableItems) {
                                 Item key = stack.getItem();
-                                if (InventoryItems.containsKey(key)) {
-                                        totalSuitableItemsInInventory += InventoryItems.get(key);
+                                if (inventoryItems.containsKey(key)) {
+                                        totalSuitableItemsInInventory += inventoryItems.get(key);
                                 }
                         }
 
@@ -112,7 +104,7 @@ public class HUDInGameRenderer{
                 }
 
                 poseStack.pushPose();
-                poseStack.translate(x, y, 0.0F);
+                poseStack.translate(x, y, 100.0F);
                 poseStack.scale(scale, scale, 1.0F);
                 poseStack.translate(-x, -y, 0);
 

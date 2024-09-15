@@ -50,7 +50,7 @@ public class ScalableItemRenderer {
                 }
 
 
-                poseStack.translate(x , y, 100);
+                poseStack.translate(x , y, 300);
                 poseStack.translate(8.0D * scale, 8.0D * scale, 0.0D);
                 poseStack.scale(1.0F, -1.0F, 1.0F);
                 poseStack.scale(16.0F * scale, 16.0F * scale, 16.0F * scale);

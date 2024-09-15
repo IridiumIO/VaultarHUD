@@ -90,7 +90,7 @@ public class HUDInventoryRenderer {
                                 List<ItemStack> suitableItems = item.items;
 
                                 int totalSuitableItemsInInventory = 0;
-                                Map<Item, Integer> inventoryItems = GetPlayerInventoryItems(minecraft.player);
+                                Map<Item, Integer> inventoryItems = GetPlayerInventoryItems(minecraft.player, 200);
                                 for (ItemStack stack : suitableItems) {
                                         Item key = stack.getItem();
                                         if (inventoryItems.containsKey(key)) {
