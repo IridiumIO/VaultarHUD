@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,31 +18,46 @@ public class ScreenValidator {
             FurnaceScreen.class
     );
 
-    public static final List<Class<? extends Screen>> RS_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
-            com.refinedmods.refinedstorage.screen.grid.GridScreen.class
+    public static final List<Class<? extends Screen>> RS_SCREENS = VaultarHud.ISDEBUG ? null : getModScreens(
+            "com.refinedmods.refinedstorage.screen.grid.GridScreen"
     );
 
-    public static final List<Class<? extends Screen>> SOPHISTICATED_BACKPACK_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
-            net.p3pp3rf1y.sophisticatedcore.client.gui.StorageScreenBase.class
+    public static final List<Class<? extends Screen>> SOPHISTICATED_BACKPACK_SCREENS = VaultarHud.ISDEBUG ? null : getModScreens(
+            "net.p3pp3rf1y.sophisticatedcore.client.gui.StorageScreenBase"
     );
 
-    public static final List<Class<? extends Screen>> AE2_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
-            appeng.client.gui.me.common.MEStorageScreen.class,
-            appeng.client.gui.me.items.CraftingTermScreen.class
+    public static final List<Class<? extends Screen>> AE2_SCREENS = VaultarHud.ISDEBUG ? null : getModScreens(
+            "appeng.client.gui.me.common.MEStorageScreen",
+            "appeng.client.gui.me.items.CraftingTermScreen"
     );
 
-    public static final List<Class<? extends Screen>> COLOSSALCHEST_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
-            org.cyclops.cyclopscore.client.gui.container.ContainerScreenExtended.class
+    public static final List<Class<? extends Screen>> COLOSSALCHEST_SCREENS = VaultarHud.ISDEBUG ? null : getModScreens(
+            "org.cyclops.cyclopscore.client.gui.container.ContainerScreenExtended"
     );
 
-    public static final List<Class<? extends Screen>> SSN_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
-            com.lothrazar.storagenetwork.block.inventory.ScreenNetworkInventory.class,
-            com.lothrazar.storagenetwork.block.request.ScreenNetworkTable.class
+    public static final List<Class<? extends Screen>> SSN_SCREENS = VaultarHud.ISDEBUG ? null : getModScreens(
+            "com.lothrazar.storagenetwork.block.inventory.ScreenNetworkInventory",
+            "com.lothrazar.storagenetwork.block.request.ScreenNetworkTable"
     );
 
-    public static final List<Class<? extends Screen>> THERMAL_SCREENS = VaultarHud.ISDEBUG ? null : Arrays.asList(
-            cofh.core.client.gui.ContainerScreenCoFH.class
+    public static final List<Class<? extends Screen>> THERMAL_SCREENS = VaultarHud.ISDEBUG ? null : getModScreens(
+            "cofh.core.client.gui.ContainerScreenCoFH"
     );
+
+    private static List<Class<? extends Screen>> getModScreens(String... classNames) {
+        List<Class<? extends Screen>> screens = new ArrayList<>();
+        for (String className : classNames) {
+            try {
+                Class<?> cls = Class.forName(className);
+                if (Screen.class.isAssignableFrom(cls)) {
+                    screens.add(cls.asSubclass(Screen.class));
+                }
+            } catch (ClassNotFoundException e) {
+                VaultarHud.LOGGER.warn("Class not found: " + className);
+            }
+        }
+        return screens;
+    }
 
 
     public static boolean isValidScreen(Screen screen){
