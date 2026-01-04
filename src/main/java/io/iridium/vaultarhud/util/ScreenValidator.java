@@ -85,22 +85,21 @@ public class ScreenValidator {
             y = ((screenHeight + 166) / 2) - offset.getY();
         }
 
-        if (isScreenInList(screen, SOPHISTICATED_BACKPACK_SCREENS)){
-            AbstractContainerScreen gs = (AbstractContainerScreen) screen;
-            x = ((screenWidth - 176) / 2) - offset.getX(); //Need to use fixed width here due to different sizes of backpacks
-            y = ((screenHeight + gs.getYSize()) / 2) - offset.getY();
-        }
+        if (screen instanceof AbstractContainerScreen<?> gs) {
+            if (isScreenInList(screen, SOPHISTICATED_BACKPACK_SCREENS)){
+                x = ((screenWidth - 176) / 2) - offset.getX(); //Need to use fixed width here due to different sizes of backpacks
+                y = ((screenHeight + gs.getYSize()) / 2) - offset.getY();
+            }
 
-        if (isScreenInList(screen, RS_SCREENS)){
-            AbstractContainerScreen gs = (AbstractContainerScreen) screen;
-            x = ((screenWidth - gs.getXSize()) / 2) - offset.getX();
-            y = ((screenHeight + gs.getYSize()) / 2) - offset.getY() -1;
-        }
+            if (isScreenInList(screen, RS_SCREENS)){
+                x = ((screenWidth - gs.getXSize()) / 2) - offset.getX();
+                y = ((screenHeight + gs.getYSize()) / 2) - offset.getY() -1;
+            }
 
-        if (isScreenInList(screen, AE2_SCREENS) || isScreenInList(screen, COLOSSALCHEST_SCREENS) || isScreenInList(screen, SSN_SCREENS) || isScreenInList(screen, THERMAL_SCREENS)){
-            AbstractContainerScreen gs = (AbstractContainerScreen) screen;
-            x = ((screenWidth - gs.getXSize()) / 2) - offset.getX();
-            y = ((screenHeight + gs.getYSize()) / 2) - offset.getY();
+            if (isScreenInList(screen, AE2_SCREENS) || isScreenInList(screen, COLOSSALCHEST_SCREENS) || isScreenInList(screen, SSN_SCREENS) || isScreenInList(screen, THERMAL_SCREENS)){
+                x = ((screenWidth - gs.getXSize()) / 2) - offset.getX();
+                y = ((screenHeight + gs.getYSize()) / 2) - offset.getY();
+            }
         }
 
         return new Point(x, y);
