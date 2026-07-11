@@ -7,7 +7,7 @@ import io.iridium.vaultarhud.VaultarHud;
 import io.iridium.vaultarhud.VaultarItem;
 import io.iridium.vaultarhud.util.Point;
 import io.iridium.vaultarhud.util.SharedFunctions;
-import iskallia.vault.client.ClientPartyData;
+import iskallia.vault.client.data.ClientPartyData;
 import iskallia.vault.world.data.VaultPartyData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
